@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Convert EPUB and MOBI ebooks to Kindle AZW3 in your browser. Bulk conversion, no uploads, files never leave your device.">
+  <title>toazw3 — EPUB &amp; MOBI to Kindle AZW3</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232a221c'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='16' fill='%23e8b86d'%3E3%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <p class="kicker">Kindle sideloading</p>
+      <h1>toazw3</h1>
+      <p class="lede">Drop EPUB or MOBI files here and convert them to AZW3 on this device. Nothing is uploaded. Bulk queues are welcome.</p>
+    </header>
+
+    <section class="engine" id="engine" aria-live="polite">
+      <span class="engine-dot" id="engine-dot"></span>
+      <span id="engine-status">Loading converter…</span>
+    </section>
+
+    <section
+      class="dropzone"
+      id="dropzone"
+      tabindex="0"
+      role="button"
+      aria-controls="queue"
+      aria-label="Add EPUB or MOBI files">
+      <input
+        id="file-input"
+        type="file"
+        accept=".epub,.mobi,.prc,.azw,.azw3,application/epub+zip,application/x-mobipocket-ebook"
+        multiple
+        hidden>
+      <div class="dropzone-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none">
+          <rect x="10" y="8" width="20" height="28" rx="2" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M14 16h12M14 21h12M14 26h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M28 22l8 8m0 0h-6.5M36 30v-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p class="dropzone-title">Drop ebooks here</p>
+      <p class="dropzone-hint">or <span class="browse">browse</span> — EPUB, MOBI, PRC, AZW. Several at once is fine.</p>
+    </section>
+
+    <section class="queue-wrap" id="queue-wrap" hidden>
+      <div class="queue-head">
+        <h2>Queue <span class="count" id="queue-count">0</span></h2>
+        <div class="queue-actions">
+          <button type="button" class="btn ghost" id="clear-btn">Clear</button>
+          <button type="button" class="btn ghost" id="add-more-btn">Add more</button>
+          <button type="button" class="btn" id="convert-btn">Convert to AZW3</button>
+        </div>
+      </div>
+      <ul class="queue" id="queue"></ul>
+      <div class="batch-bar" id="batch-bar" hidden>
+        <button type="button" class="btn" id="download-zip-btn">Download all as ZIP</button>
+        <p class="batch-note" id="batch-note"></p>
+      </div>
+    </section>
+
+    <aside class="notes">
+      <article>
+        <h3>Private by design</h3>
+        <p>Conversion runs in WebAssembly in this tab. Books are not sent to a server.</p>
+      </article>
+      <article>
+        <h3>DRM will fail</h3>
+        <p>Amazon-encrypted Kindle files cannot be converted. Use DRM-free EPUB or MOBI sources.</p>
+      </article>
+      <article>
+        <h3>Kindle copies</h3>
+        <p>Copy the <code>.azw3</code> files into your Kindle’s documents folder, or send them with USB.</p>
+      </article>
+    </aside>
+
+    <footer class="colophon">
+      <p>
+        Live site:
+        <a href="https://vicholz.github.io/toazw3/">vicholz.github.io/toazw3</a>
+      </p>
+      <p>
+        Source:
+        <a href="https://github.com/vicholz/toazw3">github.com/vicholz/toazw3</a>
+        · Conversion engine:
+        <a href="https://github.com/zacharydenton/boko">boko</a>
+        (GPL-3.0)
+      </p>
+    </footer>
+  </div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
