@@ -1,4 +1,5 @@
 import init, { convert, book_info } from '../vendor/boko/boko.js';
+import { ensureAzw3Cover } from './cover.js';
 
 let ready = false;
 
@@ -40,7 +41,8 @@ self.onmessage = async (event) => {
       info = null;
     }
 
-    const output = convert(input, msg.from, 'azw3');
+    let output = convert(input, msg.from, 'azw3');
+    output = await ensureAzw3Cover(input, msg.from, output);
     const copy = output.buffer.slice(output.byteOffset, output.byteOffset + output.byteLength);
     self.postMessage(
       { type: 'done', id: msg.id, bytes: copy, info },

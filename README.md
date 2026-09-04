@@ -8,6 +8,7 @@ Browser-only converter for **EPUB** and **MOBI** (also PRC / AZW) into Kindle **
 
 - Bulk queue: add many ebooks, convert them one after another
 - Per-file download plus **Download all as ZIP**
+- Cover images from the source EPUB/MOBI are copied into the AZW3 and tagged for Kindle
 - DRM-free files only — encrypted Kindle books will fail
 - Works from any static web server, including GitHub Pages
 
