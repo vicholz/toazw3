@@ -14,6 +14,7 @@
       <p class="kicker">Kindle sideloading</p>
       <h1>toazw3</h1>
       <p class="lede">Drop EPUB or MOBI files here and convert them to AZW3 on this device. Nothing is uploaded. Bulk queues are welcome.</p>
+      <p class="app-version" id="app-version" hidden></p>
     </header>
 
     <section class="engine" id="engine" aria-live="polite">
@@ -91,5 +92,39 @@
     </footer>
   </div>
   <script type="module" src="js/app.js"></script>
+  <script>
+    const APP_REPO = "vicholz/toazw3";
+    const APP_VERSION_FALLBACK_SHA = "aaaafd3deb2ec63b78c2c10709e9ebe841003ccc";
+
+    function renderAppVersion(sha) {
+      const el = document.querySelector("#app-version");
+      if (!el || !sha) return;
+      el.replaceChildren();
+      el.append("Version ");
+      const a = document.createElement("a");
+      a.href = "https://github.com/" + APP_REPO + "/commit/" + sha;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = sha.slice(0, 7);
+      a.title = "View the diff for this version";
+      el.appendChild(a);
+      el.hidden = false;
+    }
+
+    function loadAppVersion() {
+      renderAppVersion(APP_VERSION_FALLBACK_SHA);
+      fetch("https://api.github.com/repos/" + APP_REPO + "/commits/main")
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.status);
+          return res.json();
+        })
+        .then(function (commit) {
+          if (commit.sha) renderAppVersion(commit.sha);
+        })
+        .catch(function () {});
+    }
+
+    loadAppVersion();
+  </script>
 </body>
 </html>

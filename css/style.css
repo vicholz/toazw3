@@ -73,6 +73,24 @@ h1 {
   font-size: 1.05rem;
 }
 
+.app-version {
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+  color: #d8cbb6;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+
+.app-version a {
+  color: inherit;
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  text-underline-offset: 2px;
+}
+
+.app-version a:hover {
+  color: #e8b86d;
+}
+
 .engine {
   display: flex;
   align-items: center;
