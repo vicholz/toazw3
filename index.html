@@ -94,7 +94,6 @@
   <script type="module" src="js/app.js"></script>
   <script>
     const APP_REPO = "vicholz/toazw3";
-    const APP_VERSION_FALLBACK_SHA = "aaaafd3deb2ec63b78c2c10709e9ebe841003ccc";
 
     function renderAppVersion(sha) {
       const el = document.querySelector("#app-version");
@@ -112,7 +111,6 @@
     }
 
     function loadAppVersion() {
-      renderAppVersion(APP_VERSION_FALLBACK_SHA);
       fetch("https://api.github.com/repos/" + APP_REPO + "/commits/main")
         .then(function (res) {
           if (!res.ok) throw new Error(res.status);
