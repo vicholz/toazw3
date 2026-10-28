@@ -46,10 +46,12 @@ function concat(parts) {
 /**
  * Build an uncompressed ZIP. AZW3 is already compressed internally,
  * so STORE avoids a second deflate pass.
- * @param {{name: string, data: Uint8Array}[]} files
- * @returns {Blob}
+ * Pass `utf8: false` for ASCII names that must not set the UTF-8 flag
+ * (the EPUB `mimetype` entry).
+ * @param {{name: string, data: Uint8Array, utf8?: boolean}[]} files
+ * @returns {Uint8Array}
  */
-export function buildZip(files) {
+export function buildZipBytes(files) {
   const encoder = new TextEncoder();
   const now = dosDateTime(new Date());
   const locals = [];
@@ -60,7 +62,7 @@ export function buildZip(files) {
     const name = encoder.encode(file.name.replaceAll('\\', '/'));
     const data = file.data instanceof Uint8Array ? file.data : new Uint8Array(file.data);
     const crc = crc32(data);
-    const gpFlag = 0x0800; // UTF-8 names
+    const gpFlag = file.utf8 === false ? 0 : 0x0800;
     const local = concat([
       u32(0x04034b50),
       u16(20),
@@ -113,5 +115,13 @@ export function buildZip(files) {
     u16(0),
   ]);
 
-  return new Blob([concat([...locals, centralDir, end])], { type: 'application/zip' });
+  return concat([...locals, centralDir, end]);
+}
+
+/**
+ * @param {{name: string, data: Uint8Array, utf8?: boolean}[]} files
+ * @returns {Blob}
+ */
+export function buildZip(files) {
+  return new Blob([buildZipBytes(files)], { type: 'application/zip' });
 }

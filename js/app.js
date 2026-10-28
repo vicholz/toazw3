@@ -6,6 +6,8 @@ const FORMAT_BY_EXT = {
   prc: 'mobi',
   azw: 'mobi',
   azw3: 'azw3',
+  cbz: 'cbz',
+  cbr: 'cbr',
 };
 
 const dropzone = document.getElementById('dropzone');
@@ -93,7 +95,7 @@ function addFiles(fileList) {
 
   if (skipped && incoming.length) {
     window.alert(
-      `${skipped} file${skipped === 1 ? ' was' : 's were'} skipped. Use EPUB, MOBI, PRC, AZW, or AZW3.`,
+      `${skipped} file${skipped === 1 ? ' was' : 's were'} skipped. Use EPUB, MOBI, PRC, AZW, AZW3, CBZ, or CBR.`,
     );
   }
 
@@ -148,6 +150,9 @@ function render() {
       if (job.info && job.info.title) bits.push(job.info.title);
       if (job.info && Array.isArray(job.info.authors) && job.info.authors.length) {
         bits.push(job.info.authors.join(', '));
+      }
+      if (job.info && job.info.pages) {
+        bits.push(`${job.info.pages} page${job.info.pages === 1 ? '' : 's'}`);
       }
       meta.textContent = bits.join(' · ');
 
@@ -219,7 +224,10 @@ async function convertNext() {
 
   try {
     const bytes = await job.file.arrayBuffer();
-    worker.postMessage({ type: 'convert', id: job.id, from: job.from, bytes }, [bytes]);
+    worker.postMessage(
+      { type: 'convert', id: job.id, from: job.from, name: job.file.name, bytes },
+      [bytes],
+    );
   } catch (err) {
     job.status = 'error';
     job.error = err && err.message ? err.message : String(err);
@@ -233,6 +241,12 @@ function onWorkerMessage(event) {
     workerReady = true;
     setEngine('ready', 'Converter ready. Files stay in this browser.');
     render();
+    return;
+  }
+
+  if (msg.type === 'progress') {
+    const active = jobs.find((item) => item.id === msg.id);
+    if (active && active.status === 'converting' && msg.message) setEngine('ready', msg.message);
     return;
   }
 
